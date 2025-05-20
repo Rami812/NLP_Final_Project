@@ -20,4 +20,8 @@ Numpy
 Gensim
 Spacy
 Scikit-learn
-Matplotlib and seaborn
+Matplotlib and seaborna
+
+
+Dataset for speeches data: https://cbspeeches.com/
+Dataset for ISO: This file has been added to the repo
