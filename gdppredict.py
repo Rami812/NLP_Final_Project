@@ -151,7 +151,7 @@ def save_dataset_to_session(df, name='custom_dataset'):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-df_merged=pd.read_excel("/content/df_merged.xlsx") 
+df_merged=pd.read_excel("df_merged.xlsx") 
 df_merged.drop(columns=["Unnamed: 0","Unnamed: 0.1"],inplace=True)
 
 df_merged['Date_x'] = pd.to_numeric(pd.to_datetime(df_merged['Date_x']))
