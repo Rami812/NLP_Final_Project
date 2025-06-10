@@ -1,4 +1,4 @@
-
+pip==25.1.1
 absl-py==1.4.0
 accelerate==1.7.0
 aiofiles==24.1.0
