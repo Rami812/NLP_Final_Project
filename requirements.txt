@@ -6,3 +6,4 @@ seaborn
 io 
 ast
 pickle
+scikit-learn
