@@ -25,7 +25,26 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification, load_iris
-import io
+
+import requests
+from io import BytesIO
+
+def load_excel_from_github_raw(github_url):
+    """
+    Load Excel file directly from GitHub raw URL
+    Works best for public repositories
+    """
+    try:
+        response = requests.get(github_url)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+        
+        # Read Excel from bytes
+        excel_data = BytesIO(response.content)
+        df = pd.read_excel(excel_data)
+        return df
+    except Exception as e:
+        st.error(f"Error loading Excel from GitHub: {str(e)}")
+        return pd.DataFrame()
 # Configure page
 
 st.set_page_config(
