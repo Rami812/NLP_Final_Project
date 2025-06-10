@@ -199,7 +199,7 @@ if app_mode == "Histogram Analysis":
     
     # Show sample data
     if st.checkbox("Show sample data"):
-        st.dataframe(df_merged.head())
+        st.dataframe(df_merged.drop(columns=["index","Date_x","Date_y"]).head())
     
     # Column selection
     numeric_columns = df_merged.drop(columns=["index","Date_x","Date_y"]).select_dtypes(include=[np.number]).columns.tolist()
@@ -234,7 +234,7 @@ if app_mode == "Histogram Analysis":
         fig2=parts_of_speech_plot(df,selected_country)
         st.plotly_chart(fig2,use_container_width=True,key=2)
         # Display statistics
-        st.subheader("Statistics of the all countries")
+        st.subheader("Statistics of all the countries")
         stats_df = df_merged.drop(columns=["Date_x","Date_y","index"]).describe()
         st.dataframe(stats_df)
 elif app_mode == "Confusion Matrix Analysis":
