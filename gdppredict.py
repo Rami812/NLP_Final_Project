@@ -60,10 +60,170 @@ st.markdown("---")
 st.sidebar.title("Navigation")
 app_mode = st.sidebar.selectbox(
     "Choose Analysis Type",
-    ["Histogram Analysis", "Confusion Matrix Analysis"]
+    ["Histogram Analysis", "Confusion Matrix Analysis","GDP Trend Analysis"]
 )
 import ast
 #while figuring out the streamlit version, can look into how to better fine tune BERT for this
+def plot_gdp_trend_over_time(df_merged, country="All"):
+    """
+    Plot GDP trends over time for a specific country or all countries
+    """
+    if country != "All":
+        df_filtered = df_merged[df_merged["Country"] == country].copy()
+        title = f'GDP Trend Over Time - {country}'
+    else:
+        df_filtered = df_merged.copy()
+        title = 'GDP Trend Over Time - All Countries'
+    
+    # Convert numeric dates back to datetime for plotting
+    df_filtered['Date_readable'] = pd.to_datetime(df_filtered['Date_y'], unit='ns')
+    
+    # Sort by date for proper line plotting
+    df_filtered = df_filtered.sort_values('Date_readable')
+    
+    if country == "All":
+        # For all countries, create separate lines for each country
+        fig = px.line(df_filtered, 
+                     x='Date_readable', 
+                     y='GDP Growth Rate (%)', 
+                     color='Country',
+                     title=title,
+                     labels={'Date_readable': 'Date', 'GDP Growth Rate (%)': 'GDP Growth Rate (%)'})
+    else:
+        # For single country
+        fig = px.line(df_filtered, 
+                     x='Date_readable', 
+                     y='GDP Growth Rate (%)', 
+                     title=title,
+                     labels={'Date_readable': 'Date', 'GDP Growth Rate (%)': 'GDP Growth Rate (%)'},
+                     color_discrete_sequence=['#1f77b4'])
+    
+    fig.update_layout(
+        xaxis_title='Date',
+        yaxis_title='GDP Growth Rate (%)',
+        hovermode='x unified'
+    )
+    
+    return fig
+
+def plot_gdp_increase_over_time(df_merged, country="All"):
+    """
+    Plot GDP_increase patterns over time with different visualizations
+    """
+    if country != "All":
+        df_filtered = df_merged[df_merged["Country"] == country].copy()
+        title_suffix = f' - {country}'
+    else:
+        df_filtered = df_merged.copy()
+        title_suffix = ' - All Countries'
+    
+    # Convert numeric dates back to datetime
+    df_filtered['Date_readable'] = pd.to_datetime(df_filtered['Date_y'], unit='ns')
+    df_filtered = df_filtered.sort_values('Date_readable')
+    
+    # Create subplot with multiple visualizations
+    from plotly.subplots import make_subplots
+    
+    fig = make_subplots(
+        rows=2, cols=2,
+        subplot_titles=(
+            f'GDP Increase Over Time{title_suffix}',
+            f'GDP Increase Distribution{title_suffix}',
+            f'GDP vs GDP Increase{title_suffix}',
+            f'Monthly GDP Increase Pattern{title_suffix}'
+        ),
+        specs=[[{"secondary_y": False}, {"secondary_y": False}],
+               [{"secondary_y": False}, {"secondary_y": False}]]
+    )
+    
+    if country == "All":
+        # Plot 1: Time series of GDP_increase by country
+        for country_name in df_filtered['Country'].unique():
+            country_data = df_filtered[df_filtered['Country'] == country_name]
+            fig.add_trace(
+                go.Scatter(x=country_data['Date_readable'], 
+                          y=country_data['GDP_Increase'],
+                          mode='lines+markers',
+                          name=country_name,
+                          showlegend=True),
+                row=1, col=1
+            )
+    else:
+        # Plot 1: Single country time series
+        fig.add_trace(
+            go.Scatter(x=df_filtered['Date_readable'], 
+                      y=df_filtered['GDP_Increase'],
+                      mode='lines+markers',
+                      name='GDP Increase',
+                      line=dict(color='#1f77b4'),
+                      showlegend=False),
+            row=1, col=1
+        )
+    
+    # Plot 2: Distribution of GDP_increase
+    fig.add_trace(
+        go.Histogram(x=df_filtered['GDP_Increase'], 
+                    name='Distribution',
+                    showlegend=False,
+                    marker_color='lightblue'),
+        row=1, col=2
+    )
+    
+    # Plot 3: GDP vs GDP_Increase scatter
+    if country == "All":
+        fig.add_trace(
+            go.Scatter(x=df_filtered['GDP Growth Rate (%)'], 
+                      y=df_filtered['GDP_Increase'],
+                      mode='markers',
+                      text=df_filtered['Country'],
+                      name='GDP vs Increase',
+                      showlegend=False,
+                      marker=dict(size=8, opacity=0.7)),
+            row=2, col=1
+        )
+    else:
+        fig.add_trace(
+            go.Scatter(x=df_filtered['GDP Growth Rate (%)'], 
+                      y=df_filtered['GDP_Increase'],
+                      mode='markers',
+                      name='GDP vs Increase',
+                      showlegend=False,
+                      marker=dict(color='orange', size=8)),
+            row=2, col=1
+        )
+    
+    # Plot 4: Monthly pattern (extract month from date)
+    df_filtered['Month'] = df_filtered['Date_readable'].dt.month
+    monthly_avg = df_filtered.groupby('Month')['GDP_Increase'].mean().reset_index()
+    
+    fig.add_trace(
+        go.Bar(x=monthly_avg['Month'], 
+               y=monthly_avg['GDP_Increase'],
+               name='Monthly Average',
+               showlegend=False,
+               marker_color='green'),
+        row=2, col=2
+    )
+    
+    # Update layout
+    fig.update_layout(height=800, 
+                     title_text=f"GDP Increase Analysis{title_suffix}",
+                     showlegend=True)
+    
+    # Update axis labels
+    fig.update_xaxes(title_text="Date", row=1, col=1)
+    fig.update_yaxes(title_text="GDP Increase", row=1, col=1)
+    
+    fig.update_xaxes(title_text="GDP Increase", row=1, col=2)
+    fig.update_yaxes(title_text="Frequency", row=1, col=2)
+    
+    fig.update_xaxes(title_text="GDP", row=2, col=1)
+    fig.update_yaxes(title_text="GDP Increase", row=2, col=1)
+    
+    fig.update_xaxes(title_text="Month", row=2, col=2)
+    fig.update_yaxes(title_text="Avg GDP Increase", row=2, col=2)
+    
+    return fig
 def parts_of_speech_plot(df_merged,country):
     df_merged_filtered=df_merged[df_merged["Country"]==country]
     df_merged_filtered.reset_index(drop=True, inplace=True)
@@ -73,7 +233,7 @@ def parts_of_speech_plot(df_merged,country):
         text_dict=df_merged_filtered.loc[i,"pos_tag_weighted"]
         if text_dict.startswith('Counter('):
             inner_dict_str = text_dict[8:-1]  # Remove 'Counter(' and ')'
-        
+
         # Use ast.literal_eval to safely evaluate the dictionary string
         pos_count= ast.literal_eval(inner_dict_str)
         for key in pos_count.keys():
@@ -81,20 +241,41 @@ def parts_of_speech_plot(df_merged,country):
                 country_pos_val.update({key:pos_count[key]})
             else:
                 country_pos_val[key]+=pos_count[key]
+    pos_mapping = {
+    'INTJ': 'Interjection',
+    'SYM': 'Symbol',
+    'SPACE': 'Space',
+    'X': 'Other',
+    'SCONJ': 'Subordinating Conjunction',
+    'PART': 'Particle',
+    'NUM': 'Numeral',
+    'CCONJ': 'Coordinating Conjunction',
+    'ADV': 'Adverb',
+    'PRON': 'Pronoun',
+    'AUX': 'Auxiliary Verb',
+    'PROPN': 'Proper Noun',
+    'VERB': 'Verb',
+    'DET': 'Determiner',
+    'ADJ': 'Adjective',
+    'PUNCT': 'Punctuation',
+    'ADP': 'Adposition',
+    'NOUN': 'Noun'}
     POS_Tag=list(country_pos_val.keys())
+    POS_Tag_Full_Form = [pos_mapping[tag] for tag in POS_Tag]
+    print("POS_Tag",POS_Tag)
     relative_frequencies=list(country_pos_val.values())
     temp_df=pd.DataFrame()
-    temp_df["Parts of Speech Tags"]=POS_Tag
-    temp_df["Relative Frequencies"]=relative_frequencies
+    temp_df["Parts of Speech Tags"]=POS_Tag_Full_Form
+    temp_df["Relative Frequency"]=relative_frequencies
     print(temp_df.head(5))
     fig=px.bar(temp_df,
-        x="Parts of Speech Tags",y="Relative Frequencies", 
-        title=f'Interactive Histogram of Parts of Speech for {country}',
+        x="Parts of Speech Tags",y="Relative Frequency",
+        title=f'Histogram of Parts of Speech for {country}',
         color_discrete_sequence=['skyblue']
     )
     fig.update_layout(
         xaxis_title=country,
-        yaxis_title='Frequency',
+        yaxis_title=f'Relative Frequency to all {country} speeches/news',
         showlegend=False
     )
     return fig
@@ -261,6 +442,82 @@ elif app_mode == "Confusion Matrix Analysis":
         with col4:
           st.metric("F1-Score", f"{f1_score(y_true, y_pred, average='weighted'):.3f}")
 
+elif app_mode == "GDP Trend Analysis":
+    st.header("📈 GDP Trend Analysis")
+    
+    # Country selection
+    selected_country = st.selectbox(
+        "Choose Country for GDP Analysis:",
+        ['All', 'USA', 'Japan', 'France', 'Canada', 'Australia']
+    )
+    
+    # Analysis type selection
+    analysis_type = st.radio(
+        "Select Analysis Type:",
+        ["GDP Trend Over Time", "GDP Increase Analysis", "Both"]
+    )
+    
+    if st.button("Generate GDP Analysis"):
+        if analysis_type in ["GDP Trend Over Time", "Both"]:
+            st.subheader("GDP Trend Over Time")
+            fig1 = plot_gdp_trend_over_time(df_merged, selected_country)
+            st.plotly_chart(fig1, use_container_width=True)
+            
+            # Display summary statistics
+            if selected_country != "All":
+                country_data = df_merged[df_merged["Country"] == selected_country]
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.metric("Average GDP", f"{country_data['GDP'].mean():.2f}")
+                with col2:
+                    st.metric("Max GDP", f"{country_data['GDP'].max():.2f}")
+                with col3:
+                    st.metric("Min GDP", f"{country_data['GDP'].min():.2f}")
+                with col4:
+                    st.metric("GDP Growth Rate", f"{((country_data['GDP'].iloc[-1] / country_data['GDP'].iloc[0]) - 1) * 100:.2f}%")
+        
+        if analysis_type in ["GDP Increase Analysis", "Both"]:
+            st.subheader("GDP Increase Analysis")
+            fig2 = plot_gdp_increase_over_time(df_merged, selected_country)
+            st.plotly_chart(fig2, use_container_width=True)
+            
+            # GDP Increase statistics
+            if selected_country != "All":
+                country_data = df_merged[df_merged["Country"] == selected_country]
+            else:
+                country_data = df_merged
+                
+            increase_count = (country_data['GDP_Increase'] == 1).sum()
+            total_count = len(country_data)
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("GDP Increase Rate", f"{(increase_count/total_count*100):.1f}%")
+            with col2:
+                st.metric("Periods with GDP Increase", f"{increase_count}")
+            with col3:
+                st.metric("Total Periods", f"{total_count}")
+
+
+
+    st.info("Using Logistic Regression  model with 2 classes")
+    if st.button("Generate Confusion Matrix"):
+        fig, cm = plot_confusion_matrix(y_true, y_pred)
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Display metrics
+        st.subheader("Classification Metrics")
+        from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+          st.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.3f}")
+        with col2:
+          st.metric("Precision", f"{precision_score(y_true, y_pred, average='weighted'):.3f}")
+        with col3:
+          st.metric("Recall", f"{recall_score(y_true, y_pred, average='weighted'):.3f}")
+        with col4:
+          st.metric("F1-Score", f"{f1_score(y_true, y_pred, average='weighted'):.3f}")
 
 # Footer
 st.markdown("---")
