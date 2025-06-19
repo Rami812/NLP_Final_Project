@@ -353,7 +353,6 @@ def save_dataset_to_session(df, name='custom_dataset'):
     plt.show()
 df_merged=pd.read_excel("df_merged.xlsx") 
 
-#df_merged['Date_x'] = pd.to_numeric(pd.to_datetime(df_merged['Date_x']))
 df_merged['Date_y'] = pd.to_numeric(pd.to_datetime(df_merged['Date_y']))
 
 X = df_merged.select_dtypes(include=['float',"int"])
