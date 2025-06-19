@@ -352,14 +352,24 @@ def save_dataset_to_session(df, name='custom_dataset'):
     plt.tight_layout()
     plt.show()
 df_merged=pd.read_excel("df_merged.xlsx") 
-df_merged.drop(columns=["Unnamed: 0","Unnamed: 0.1"],inplace=True)
 
-df_merged['Date_x'] = pd.to_numeric(pd.to_datetime(df_merged['Date_x']))
+#df_merged['Date_x'] = pd.to_numeric(pd.to_datetime(df_merged['Date_x']))
 df_merged['Date_y'] = pd.to_numeric(pd.to_datetime(df_merged['Date_y']))
-X = df_merged.select_dtypes(include=['float'])
+
+X = df_merged.select_dtypes(include=['float',"int"])
 y = df_merged["GDP_Increase"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y)
-model = LogisticRegression()
+
+test_size = 0.2
+
+# Use chronological split instead to preserve time-series relation
+split_index = int(len(X) * (1 - test_size))
+X_train = X.iloc[:split_index]
+X_test = X.iloc[split_index:]
+y_train = y.iloc[:split_index]
+y_test = y.iloc[split_index:]
+#'classifier__C': np.float64(10.0), 'classifier__max_iter': 1000, 'classifier__penalty': 'l1', 'classifier__solver': 'liblinear'
+
+model = LogisticRegression(penalty="l1",C=10.0,max_iter=1000,solver="liblinear")
 model.fit(X_train, y_train)
 y_pred=model.predict(X_test)
 y_true, y_pred = y_test,y_pred
