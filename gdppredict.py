@@ -385,7 +385,7 @@ if app_mode == "Histogram Analysis":
     with col2:
         st.metric("Columns", len(df_merged.columns))
     with col3:
-        st.metric("Numeric Columns", len(df_merged.drop(columns=["index","Date_x","Date_y"]).select_dtypes(include=[np.number]).columns))
+        st.metric("Numeric Columns", len(df_merged.select_dtypes(include=[np.number]).columns))
     
     # Show sample data
     if st.checkbox("Show sample data"):
