@@ -518,7 +518,7 @@ elif app_mode == "GDP Trend Analysis":
         st.subheader("Classification Metrics")
         from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-        col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4,col5 = st.columns(5)
         with col1:
           st.metric("Accuracy", f"{accuracy_score(y_true, y_pred):.3f}")
         with col2:
@@ -527,6 +527,9 @@ elif app_mode == "GDP Trend Analysis":
           st.metric("Recall", f"{recall_score(y_true, y_pred, average='weighted'):.3f}")
         with col4:
           st.metric("F1-Score", f"{f1_score(y_true, y_pred, average='weighted'):.3f}")
+        with col5:
+            st.metric("ROC", f"{roc_auc_score(y_true, y_pred, average='weighted'):.3f}")
+            
 
 # Footer
 st.markdown("---")
