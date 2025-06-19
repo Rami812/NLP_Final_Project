@@ -389,10 +389,10 @@ if app_mode == "Histogram Analysis":
     
     # Show sample data
     if st.checkbox("Show sample data"):
-        st.dataframe(df_merged.drop(columns=["index","Date_x","Date_y"]).head())
+        st.dataframe(df_merged.head())
     
     # Column selection
-    numeric_columns = df_merged.drop(columns=["index","Date_x","Date_y"]).select_dtypes(include=[np.number]).columns.tolist()
+    numeric_columns = df_merged.select_dtypes(include=[np.number]).columns.tolist()
     
     if not numeric_columns:
         st.error("No numeric columns found in the dataset!")
@@ -425,7 +425,7 @@ if app_mode == "Histogram Analysis":
         st.plotly_chart(fig2,use_container_width=True,key=2)
         # Display statistics
         st.subheader("Statistics of all the countries")
-        stats_df = df_merged.drop(columns=["Date_x","Date_y","index"]).describe()
+        stats_df = df_merged.drop(columns=["Date_y"]).describe()
         st.dataframe(stats_df)
 elif app_mode == "Confusion Matrix Analysis":
     st.header("🎯 Confusion Matrix Analysis")
