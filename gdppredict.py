@@ -25,6 +25,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification, load_iris
+from sklearn.preprocessing import StandardScaler
 
 import requests
 from io import BytesIO
@@ -366,6 +367,11 @@ X_train = X.iloc[:split_index]
 X_test = X.iloc[split_index:]
 y_train = y.iloc[:split_index]
 y_test = y.iloc[split_index:]
+scaler = StandardScaler()
+scaler.fit(X_train)
+# Transform both training and test data
+X_train = scaler.transform(X_train)
+X_test = scaler.transform(X_test)
 #'classifier__C': np.float64(10.0), 'classifier__max_iter': 1000, 'classifier__penalty': 'l1', 'classifier__solver': 'liblinear'
 
 model = LogisticRegression(penalty="l1",C=10.0,max_iter=1000,solver="liblinear")
