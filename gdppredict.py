@@ -33,7 +33,7 @@ st.markdown("### Utilizing Central Bank Speeches and News Data to Predict GDP Tr
 st.markdown("---")
 
 # Introduction section
-st.markdown("""
+st.info("""
 **Introduction and Background:**
 
 In this project, we try to utilize central bank speeches and news data across different countries to predict whether or not the Gross Domestic Indicator (GDP) increases post news/speech. Political speeches have often acted as summaries, especially ones from central banks who have mandates relating to ensuring price stability and in the case of the US, also ensuring that there are high levels of employment. There has always been debate on how much to disclose and communicate about strategic initiatives like monetary policies in combating inflationary/deflationary rates for the common public. Therefore, with the help of modern NLP techniques, this project is meant to answer the following questions:
