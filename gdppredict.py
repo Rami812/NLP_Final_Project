@@ -481,13 +481,13 @@ elif app_mode == "GDP Trend Analysis":
                 country_data = df_merged[df_merged["Country"] == selected_country]
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
-                    st.metric("Average GDP", f"{country_data['GDP'].mean():.2f}")
+                    st.metric("Average GDP", f"{country_data['GDP Growth Rate (%)'].mean():.2f}")
                 with col2:
-                    st.metric("Max GDP", f"{country_data['GDP'].max():.2f}")
+                    st.metric("Max GDP", f"{country_data['GDP Growth Rate (%)'].max():.2f}")
                 with col3:
-                    st.metric("Min GDP", f"{country_data['GDP'].min():.2f}")
+                    st.metric("Min GDP", f"{country_data['GDP Growth Rate (%)'].min():.2f}")
                 with col4:
-                    st.metric("GDP Growth Rate", f"{((country_data['GDP'].iloc[-1] / country_data['GDP'].iloc[0]) - 1) * 100:.2f}%")
+                    st.metric("GDP Growth Rate", f"{((country_data['GDP Growth Rate (%)'].iloc[-1] / country_data['GDP'].iloc[0]) - 1) * 100:.2f}%")
         
         if analysis_type in ["GDP Increase Analysis", "Both"]:
             st.subheader("GDP Increase Analysis")
