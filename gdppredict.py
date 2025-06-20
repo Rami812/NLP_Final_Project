@@ -134,7 +134,7 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
             f'GDP Distribution{title_suffix}',
         ),
         specs=[[{"secondary_y": False}, {"secondary_y": False}],
-               [{"secondary_y": False}]]
+               [{"secondary_y": False}, {"secondary_y": False}]]
     )
     
     if country == "All":
