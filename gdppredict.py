@@ -33,7 +33,7 @@ st.markdown("### Utilizing Central Bank Speeches and News Data to Predict GDP Tr
 st.markdown("---")
 
 # Introduction section
-st.info("""
+st.markdown("""
 **Introduction and Background:**
 
 In this project, we try to utilize central bank speeches and news data across different countries to predict whether or not the Gross Domestic Indicator (GDP) increases post news/speech. Political speeches have often acted as summaries, especially ones from central banks who have mandates relating to ensuring price stability and in the case of the US, also ensuring that there are high levels of employment. There has always been debate on how much to disclose and communicate about strategic initiatives like monetary policies in combating inflationary/deflationary rates for the common public. Therefore, with the help of modern NLP techniques, this project is meant to answer the following questions:
@@ -396,8 +396,6 @@ if app_mode == "Histogram Analysis":
     st.markdown("""
 **Methodology and Data Results**
 
-Methodology and Data Results:
-
 At first we merge two different datasets- one containing economic indicators like unemployment level, inflation, GDP etc from that has been compiled by MIT from sources like the Word Bank and another- containing speeches from different central banks compiled by a group of research to complement the original source made by the Bank of International settlement. As there were few matches between the dataset, we also utilized news updates across countries through the AlphaVantage API to filter for news/economic data. As there were low matches between exact dates across the datasets, we used the year as our merging condition for the record of GDP as well as the textual data either speech or news. 
 
 Creating Target Variable:
@@ -407,7 +405,6 @@ Word2Vec Embedding:
 We then apply the pretrained model-Word2Vec- to get an indicative speech level embedding by going through each of the sentences for a speech. The model that comes with an input, hidden and an output layer gets trained on each of the words in the vocabulary in order. We use it to create two versions of embeddings- Continuous Bag of Words (CBOW) and Skip-Gram(Sgram). With the former we try to predict the current word being looked at based on the surrounding words and with the latter we try to predict surrounding words based on the current word being looked at. Both versions provide a better understanding of semantic relations so we apply both to create word embeddings for every speech. As we will be using logistic regression in our model, we first calculate an average vector based on the vectors in  sentence and then take the average value of components of this vector to represent a final scalar value from the word2vec models which we utilize as features. 
 
 We then evaluate the effectiveness of our models by comparing the cosine similarity our model generates between words compared to the amount generated from a human annotated dataset of SimLex-999 which has a similarity score between words as well. 
-
 
 The results showed that almost 80% of the word pairs had at least one word not found in our model’s dictionary also not found in our dictionary. This was gained even after adjusting hyperparameters of the model indicating how the wordset in the dataset might be more novel compared to the one in SimLex. 
 
