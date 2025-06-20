@@ -512,7 +512,7 @@ Additionally in terms of feature importance the following were the most importan
 - **speech_embedding_CBOW:** 16%
 - **speech_embedding_Sgram:** 8%
 
-We also trained a FIN-BERT model which is a pre-trained NLP model that has been trained on financial data for sentiment analysis, our results were similar much worse compared to that of our hyper-parameter tuned Logistic Regression model with an auc_roc score of 0.5. This indicates in order to check if a pre-trained model can perform better, we would need to finetune it to our dataset and also acquire more data for further improved training
+We also trained a FIN-BERT model which is a pre-trained NLP model that has been trained on financial data for sentiment analysis, our results were similar much worse compared to that of our hyper-parameter tuned Logistic Regression model with an auc_roc score of 0.5. This indicates in order to check if a pre-trained model can perform better, we would need to finetune it to our dataset and also acquire more data for further improved training.
 """)
         st.markdown("---")
 
