@@ -40,10 +40,7 @@ In this project, we try to utilize central bank speeches and news data across di
 - Are there notable differences in speeches by central banks between countries which can be studied to ensure a better methodology for delivering such speeches across countries? Answered in the Histogram Analysis Tab
 - With every country being connected in a global economy, are there common trends in their GDP values across time? Answered in the GDP Analysis Tab
 - Would machine learning models like Logistic Regression or pre-trained models like FinBERT fare well in being able to speculate if GDP is to increase/decrease? Answered in the Confusion Matrix Tab
-With central bank speeches oftentimes, being summaries of more complicated econometric and financial analysis meant to provide insights to the common public in a more bite sized manner, there is a growing importance of ensuring such communication is executed effectively and Natural Language Processing techniques are assisting in analyzing these further.We picked GDP as the variable for increment/decrement as this is often times calculated as the average of common goods across nations and these prices are indicative of the market factors of demand and supply being present in the economy. 
-
-""")
-
+With central bank speeches oftentimes, being summaries of more complicated econometric and financial analysis meant to provide insights to the common public in a more bite sized manner, there is a growing importance of ensuring such communication is executed effectively and Natural Language Processing techniques are assisting in analyzing these further.We picked GDP as the variable for increment/decrement as this is often times calculated as the average of common goods across nations and these prices are indicative of the market factors of demand and supply being present in the economy. """)
 st.markdown("---")
 def load_excel_from_github_raw(github_url):
     """
@@ -496,7 +493,7 @@ elif app_mode == "Confusion Matrix Analysis":
           st.metric("F1-Score", f"{f1_score(y_true, y_pred, average='weighted'):.3f}")
         with col5:
             st.metric("ROC", f"{roc_auc_score(y_true, y_pred, average='weighted'):.3f}")
-                st.markdown("---")
+        st.markdown("---")
         st.markdown("""
 **Logistic Regression Analysis **
 Before we apply the logistic regression model, we ensure the data is well prepared for the model. We maintain chronological order of the GDP by ordering the dataset by date, this is to ensure that sequence with time dependent data is maintained and perform Time Series cross validation with 5 folds to get the best hyperparameters for our model’s performance. By 5 folds, we ensure that it iteratively trains and tests itself by separating chunks of the training data as validation data with each trying a different combination of parameters to see which one leads to the best result overall in training. We use roc_auc as our main metric for comparison as this indicates how well our model can distinguish between our two target classes. The best hyperparameter combination for our model that we get is the following:
