@@ -389,30 +389,30 @@ In this project, we try to utilize central bank speeches and news data across di
 - With every country being connected in a global economy, are there common trends in their GDP values across time? Answered in the GDP Analysis Tab
 - Would machine learning models like Logistic Regression or pre-trained models like FinBERT fare well in being able to speculate if GDP is to increase/decrease? Answered in the Confusion Matrix Tab
 
-With central bank speeches oftentimes, being summaries of more complicated econometric and financial analysis meant to provide insights to the common public in a more bite sized manner, there is a growing importance of ensuring such communication is executed effectively and Natural Language Processing techniques are assisting in analyzing these further.We picked GDP as the variable for increment/decrement as this is often times calculated as the average of common goods across nations and these prices are indicative of the market factors of demand and supply being present in the economy. """)
+With central bank speeches oftentimes, being summaries of more complicated econometric and financial analysis meant to provide insights to the common public in a more bite sized manner, there is a growing importance of ensuring such communication is executed effectively and Natural Language Processing techniques are assisting in analyzing these further. We picked GDP as the variable for increment/decrement as this is often times calculated as the average of common goods across nations and these prices are indicative of the market factors of demand and supply being present in the economy. """)
     st.markdown("---")
     # Methodology section
     st.markdown("""
 **Methodology and Data Results**
 
-At first we merge two different datasets- one containing economic indicators like unemployment level, inflation, GDP etc from that has been compiled by MIT from sources like the Word Bank and another- containing speeches from different central banks compiled by a group of research to complement the original source made by the Bank of International settlement. As there were few matches between the dataset, we also utilized news updates across countries through the AlphaVantage API to filter for news/economic data. As there were low matches between exact dates across the datasets, we used the year as our merging condition for the record of GDP as well as the textual data either speech or news. 
+At first we merge two different datasets- one containing economic indicators like unemployment level, inflation, GDP etc that has been compiled by MIT from sources like the Word Bank and another- containing speeches from different central banks compiled by a group of research to complement the original source made by the Bank of International settlement. Due to few matches between the datasets, we also utilized news updates across countries through the AlphaVantage API to filter for news/economic data. As there were low matches between exact dates across the datasets, we used the year as our merging condition for the record of GDP as well as the textual data to be either speech or news. 
 
 **Creating Target Variable:**
 We  merge our datasets based on common columns like Date and Country to create a main one. On it we then create our target column-”GDP Increase” to contain a “Yes” if the previous year in our dataset had lower value than the current one for a specific country. 
 
 **Word2Vec Embedding:**
-We then apply the pretrained model-Word2Vec- to get an indicative speech level embedding by going through each of the sentences for a speech. The model that comes with an input, hidden and an output layer gets trained on each of the words in the vocabulary in order. We use it to create two versions of embeddings- Continuous Bag of Words (CBOW) and Skip-Gram(Sgram). With the former we try to predict the current word being looked at based on the surrounding words and with the latter we try to predict surrounding words based on the current word being looked at. Both versions provide a better understanding of semantic relations so we apply both to create word embeddings for every speech. As we will be using logistic regression in our model, we first calculate an average vector based on the vectors in  sentence and then take the average value of components of this vector to represent a final scalar value from the word2vec models which we utilize as features. 
+We then apply the pretrained model-Word2Vec- to get an indicative speech level embedding by going through each of the sentences for a speech. The model that comes with an input, hidden and an output layer, gets trained on each of the words in the vocabulary in order of being seen. We use it to create two versions of embeddings- Continuous Bag of Words (CBOW) and Skip-Gram (Sgram). With the former we try to predict the current word being looked at based on the surrounding words and with the latter we try to predict surrounding words based on the current word being looked at. Both versions provide a better understanding of semantic relations so we apply both to create word embeddings for every speech. As we will be using logistic regression as our model, we first calculate an average vector based on the vectors for a sentence and then take the average value of components of this vector to represent a final scalar value from the word2vec models which we utilize as features. 
 
 We then evaluate the effectiveness of our models by comparing the cosine similarity our model generates between words compared to the amount generated from a human annotated dataset of SimLex-999 which has a similarity score between words as well. 
 
-The results showed that almost 80% of the word pairs had at least one word not found in our model’s dictionary also not found in our dictionary. This was gained even after adjusting hyperparameters of the model indicating how the wordset in the dataset might be more novel compared to the one in SimLex. 
+The results showed that almost 80% of the word pairs had at least one word not found in our model’s dictionary. This was gained even after adjusting hyperparameters of the model indicating how the wordset in the dataset might be more novel compared to the one in SimLex. 
 
 **Parts of Speech Tagging:**
 We utilized the en_core_web_sm model from the spaCy natural language processing library to process the grammar in every speech. We get pairing of words and their respective grammar like (word, Noun) across the vocab covering objects like Noun, Verb and Adj. We then perform a total count of the grammar objects across the dataset to then do a relative count to the total for each speech. This relative Part of Speech frequency is then added as features to the dataset to be used in our model. 
 
 We analyze the data further by checking if the relative frequency of grammar objects is different across countries and plotting relative frequencies across different countries. 
 
-With different parts of speeches being present across countries and concentration of objects like Interjections  being different in speeches across countries like for the USA and Japan, there seems to be a clear indication for different methods of communication. 
+With different parts of speeches being present across countries and concentration of objects like Interjections being different for countries like the USA and Japan, there seems to be a clear indication for different methods of communication. 
 
 Below you can play around with the dataset to filter it and see some of the distributions of our features:""")
     st.markdown("---")
@@ -492,27 +492,27 @@ elif app_mode == "Confusion Matrix Analysis":
         st.markdown("""
 **Logistic Regression Analysis**
 
-Before we apply the logistic regression model, we ensure the data is well prepared for the model. We maintain chronological order of the GDP by ordering the dataset by date, this is to ensure that sequence with time dependent data is maintained and perform Time Series cross validation with 5 folds to get the best hyperparameters for our model’s performance. By 5 folds, we ensure that it iteratively trains and tests itself by separating chunks of the training data as validation data with each trying a different combination of parameters to see which one leads to the best result overall in training. We use roc_auc as our main metric for comparison as this indicates how well our model can distinguish between our two target classes. The best hyperparameter combination for our model that we get is the following:
+Before we apply the logistic regression model, we ensure the data is well prepared for the model. We maintain chronological order of the GDP by ordering the dataset by date, this is to ensure that sequence with time dependent data is maintained and perform Time Series cross validation with 5 folds to get the best hyperparameters for our model’s performance. By 5 folds, we ensure that it iteratively trains and tests itself by separating chunks of the training data as validation data wherein with each fold it tries different combinations of parameters to see which one leads to the best result overall. We use roc_auc as our main metric for comparison as this indicates how well our model can distinguish between our two target classes. The best hyperparameter combination for our model that we get is the following:
 
-- **Regularization Strength (C=10):** This is the inverse regularization indicator, showing that our model benefits from moderate regularization of historical data and higher values can lead to overfitting to our training data. 
-- **Penalty Regularization (L1):** L1 regularization(Lasso) indicates that our model performs better by letting some of our model features become irrelevant with a zero coefficient. 
-- **Solver Algorithm(liblinear):** This hyperparameter indicates the method through which the model can find the correct weight in terms of importance in features for better predictions for our model and in this case by trying different values at a time for each feature leads to a better result. 
-- **Maximum Iterations(1000):** This indicates the optimal number of steps required for the solver to find out the correct weight to give to each feature in our dataset
+- **Regularization Strength (C=10):** This is the inverse regularization indicator, showing that our model benefits from moderate regularization of historical data and higher values can lead to overfitting to our training data
+- **Penalty Regularization (L1):** L1 regularization (Lasso) indicates that our model performs better by letting some of our model features become irrelevant with a zero coefficient
+- **Solver Algorithm(liblinear):** This hyperparameter indicates the method through which the model can find the correct weight in terms of importance in features for better predictions for our model and in this case by trying different values at a time for each feature leads to a better result
+- **Maximum Iterations(1000):** This indicates the optimal number of steps required for the solver to find the correct weight to give to each feature in our dataset
 
 Below is the resulting confusion matrix that we get from our model detailing our predictions:
 
 
-Based on the confusion matrix we realize that the model has the following metrics:
-- **Precision:** When making the prediction of 1(Increase in GDP), the model is correct by 90% of the time. 
-- **Accuracy:** When the model makes predictions, it makes the correct one 90% of the time. 
-- **ROC_AUC:** The model’s ability to differentiate between increase and decrease in GDP cases is 90%
+Based on the confusion matrix, we realize that the model has the following metrics:
+- **Precision:** When making the prediction of 1 (Increase in GDP), the model is correct 90% of the time
+- **Accuracy:** When the model makes predictions, it makes the correct one 90% of the time 
+- **ROC_AUC:** The model’s ability to differentiate between increase and decrease in GDP classes is 90%
 
 Additionally in terms of feature importance the following were the most important in predictions:
 - **GDP Growth Rate:** 30%
 - **speech_embedding_CBOW:** 16%
 - **speech_embedding_Sgram:** 8%
 
-We also trained a FIN-BERT model which is a pre-trained NLP model that has been trained on financial data for sentiment analysis, our results were similar much worse compared to that of our hyper-parameter tuned Logistic Regression model with an auc_roc score of 0.5. This indicates in order to check if a pre-trained model can perform better, we would need to finetune it to our dataset and also acquire more data for further improved training.
+We also trained a FIN-BERT model which is a pre-trained NLP model that has been trained on financial data for sentiment analysis, it resulted with an auc_roc score of 0.5 which was much worse compared to our hyper-parameter tuned Logistic Regression model. This indicates that in order to check if a pre-trained model can perform better, we would need to finetune it to our dataset and also acquire more data for further training.
 """)
         st.markdown("---")
 
@@ -525,9 +525,9 @@ elif app_mode == "GDP Trend Analysis":
 **Data Visual Anlaysis**
 This section is meant to check for common trends in GDP values and GDP increases across countries via data visuals. Based on looking at figures for countries like Canada and France there does not seem to be a consistent distribution or trend over time between countries. Below is what the data visuals you generate is meant to show:
 
-- **GDP Trend Over Time:** A trendline meant to showcase the rate of increase in GDP values for countries (In general due to inflation there is an overall increasing trend with a few dips across the years for each country)
-- **GDP Increase Over Time:** Showcases if GDP increased or decreased for consecutive periods of time with a darker shade representing that GDP increased/decreased more frequently in timer horizon
-- **GDP Increase Distribution:** Shows the count of 0s and 1s for a specific country in our a dataset 
+- **GDP Trend Over Time:** A trendline meant to showcase the rate of increase in GDP values for countries (In general, there is an overall increasing trend with a few dips across the years for each country, possibly due to inflation)
+- **GDP Increase Over Time:** Showcases if GDP increased or decreased for consecutive periods of time with a darker shade representing that GDP increased/decreased more frequently in that time horizon
+- **GDP Increase Distribution:** Shows the count of 0s and 1s for a specific country in our dataset 
 - **GDP Values Distribution:** Shows the count of GDP values for the country being referenced in our dataset
 
 """)
