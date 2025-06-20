@@ -131,10 +131,9 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
             f'GDP Increase Over Time{title_suffix}',
             f'GDP Increase Distribution{title_suffix}',
             f'GDP vs GDP Increase{title_suffix}',
-            f'Monthly GDP Pattern{title_suffix}'
         ),
         specs=[[{"secondary_y": False}, {"secondary_y": False}],
-               [{"secondary_y": False}, {"secondary_y": False}]]
+               [{"secondary_y": False}]]
     )
     
     if country == "All":
@@ -193,18 +192,7 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
             row=2, col=1
         )
     
-    # Plot 4: Monthly pattern (extract month from date)
-    df_filtered['Month'] = df_filtered['Date_readable'].dt.month
-    monthly_avg = df_filtered.groupby('Month')['GDP Growth Rate (%)'].mean().reset_index()
-    
-    fig.add_trace(
-        go.Bar(x=monthly_avg['Month'], 
-               y=monthly_avg['GDP Growth Rate (%)'],
-               name='Monthly Average',
-               showlegend=False,
-               marker_color='green'),
-        row=2, col=2
-    )
+
     
     # Update layout
     fig.update_layout(height=800, 
@@ -221,8 +209,6 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
     fig.update_xaxes(title_text="GDP", row=2, col=1)
     fig.update_yaxes(title_text="GDP Increase", row=2, col=1)
     
-    fig.update_xaxes(title_text="Month", row=2, col=2)
-    fig.update_yaxes(title_text="Avg GDP Increase", row=2, col=2)
     
     return fig
 def parts_of_speech_plot(df_merged,country):
