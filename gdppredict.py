@@ -29,20 +29,8 @@ from sklearn.preprocessing import StandardScaler
 
 import requests
 from io import BytesIO
+st.markdown("---")
 st.markdown("### Utilizing Central Bank Speeches and News Data to Predict GDP Trends Across Countries")
-st.markdown("---")
-
-# Introduction section
-st.markdown("""
-**Introduction and Background**
-
-In this project, we try to utilize central bank speeches and news data across different countries to predict whether or not the Gross Domestic Indicator (GDP) increases post news/speech. Political speeches have often acted as summaries, especially ones from central banks who have mandates relating to ensuring price stability and in the case of the US, also ensuring that there are high levels of employment. There has always been debate on how much to disclose and communicate about strategic initiatives like monetary policies in combating inflationary/deflationary rates for the common public. Therefore, with the help of modern NLP techniques, this project is meant to answer the following questions:
-- Are there notable differences in speeches by central banks between countries which can be studied to ensure a better methodology for delivering such speeches across countries? Answered in the Histogram Analysis Tab
-- With every country being connected in a global economy, are there common trends in their GDP values across time? Answered in the GDP Analysis Tab
-- Would machine learning models like Logistic Regression or pre-trained models like FinBERT fare well in being able to speculate if GDP is to increase/decrease? Answered in the Confusion Matrix Tab
-
-With central bank speeches oftentimes, being summaries of more complicated econometric and financial analysis meant to provide insights to the common public in a more bite sized manner, there is a growing importance of ensuring such communication is executed effectively and Natural Language Processing techniques are assisting in analyzing these further.We picked GDP as the variable for increment/decrement as this is often times calculated as the average of common goods across nations and these prices are indicative of the market factors of demand and supply being present in the economy. """)
-st.markdown("---")
 def load_excel_from_github_raw(github_url):
     """
     Load Excel file directly from GitHub raw URL
@@ -392,6 +380,16 @@ y_true, y_pred = y_test,y_pred
 # Main app logic
 if app_mode == "Histogram Analysis":
     st.header("📈 Histogram Analysis")
+    st.markdown("---")
+    st.markdown("""
+**Introduction and Background**
+
+In this project, we try to utilize central bank speeches and news data across different countries to predict whether or not the Gross Domestic Indicator (GDP) increases post news/speech. Political speeches have often acted as summaries, especially ones from central banks who have mandates relating to ensuring price stability and in the case of the US, also ensuring that there are high levels of employment. There has always been debate on how much to disclose and communicate about strategic initiatives like monetary policies in combating inflationary/deflationary rates for the common public. Therefore, with the help of modern NLP techniques, this project is meant to answer the following questions:
+- Are there notable differences in speeches by central banks between countries which can be studied to ensure a better methodology for delivering such speeches across countries? Answered in the Histogram Analysis Tab
+- With every country being connected in a global economy, are there common trends in their GDP values across time? Answered in the GDP Analysis Tab
+- Would machine learning models like Logistic Regression or pre-trained models like FinBERT fare well in being able to speculate if GDP is to increase/decrease? Answered in the Confusion Matrix Tab
+
+With central bank speeches oftentimes, being summaries of more complicated econometric and financial analysis meant to provide insights to the common public in a more bite sized manner, there is a growing importance of ensuring such communication is executed effectively and Natural Language Processing techniques are assisting in analyzing these further.We picked GDP as the variable for increment/decrement as this is often times calculated as the average of common goods across nations and these prices are indicative of the market factors of demand and supply being present in the economy. """)
     st.markdown("---")
     # Methodology section
     st.markdown("""
