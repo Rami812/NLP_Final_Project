@@ -521,7 +521,7 @@ elif app_mode == "GDP Trend Analysis":
     st.markdown("---")
     # Data Visuals section
     st.markdown("""
-**Data Vissual Anlaysis**
+**Data Visual Anlaysis**
 This section is meant to check for common trends in GDP values and GDP increases across countries via data visuals. Based on looking at figures for countries like Canada and France there does not seem to be a consistent distribution or trend over time between countries. Below is what the data visuals you generate is meant to show:
 
 - **GDP Trend Over Time:** A trendline meant to showcase the rate of increase in GDP values for countries (In general due to inflation there is an overall increasing trend with a few dips across the years for each country)
