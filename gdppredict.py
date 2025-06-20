@@ -126,11 +126,12 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
     from plotly.subplots import make_subplots
     
     fig = make_subplots(
-        rows=3, cols=1,
+        rows=2, cols=2,
         subplot_titles=(
             f'GDP Increase Over Time{title_suffix}',
             f'GDP Increase Distribution{title_suffix}',
             f'GDP vs GDP Increase{title_suffix}',
+            f'GDP Distribution{title_suffix}',
         ),
         specs=[[{"secondary_y": False}, {"secondary_y": False}],
                [{"secondary_y": False}]]
@@ -166,7 +167,7 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
                     name='Distribution',
                     showlegend=False,
                     marker_color='lightblue'),
-        row=2, col=1
+        row=1, col=2
     )
     
     # Plot 3: GDP vs GDP_Increase scatter
@@ -179,7 +180,7 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
                       name='GDP vs Increase',
                       showlegend=False,
                       marker=dict(size=8, opacity=0.7)),
-            row=3, col=1
+            row=2, col=1
         )
     else:
         fig.add_trace(
@@ -189,8 +190,16 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
                       name='GDP vs Increase',
                       showlegend=False,
                       marker=dict(color='orange', size=8)),
-            row=3, col=1
+            row=2, col=1
         )
+    # Plot 2: Distribution of GDP_increase
+    fig.add_trace(
+        go.Histogram(x=df_filtered['GDP Growth Rate (%)'], 
+                    name='Distribution',
+                    showlegend=False,
+                    marker_color='lightblue'),
+        row=2, col=2
+    )
     
 
     
@@ -203,11 +212,14 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
     fig.update_xaxes(title_text="Date", row=1, col=1)
     fig.update_yaxes(title_text="GDP Increase", row=1, col=1)
     
-    fig.update_xaxes(title_text="GDP Increase", row=2, col=1)
-    fig.update_yaxes(title_text="Frequency", row=2, col=1)
+    fig.update_xaxes(title_text="GDP Increase", row=1, col=2)
+    fig.update_yaxes(title_text="Frequency", row=1, col=2)
     
-    fig.update_xaxes(title_text="GDP", row=3, col=1)
-    fig.update_yaxes(title_text="GDP Increase", row=3, col=1)
+    fig.update_xaxes(title_text="GDP", row=2, col=1)
+    fig.update_yaxes(title_text="GDP Increase", row=2, col=1)
+
+    fig.update_xaxes(title_text="GDP Value", row=2, col=2)
+    fig.update_yaxes(title_text="Frequency", row=2, col=2)
     
     
     return fig
