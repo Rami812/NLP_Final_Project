@@ -491,6 +491,7 @@ elif app_mode == "Confusion Matrix Analysis":
         st.markdown("---")
         st.markdown("""
 **Logistic Regression Analysis**
+
 Before we apply the logistic regression model, we ensure the data is well prepared for the model. We maintain chronological order of the GDP by ordering the dataset by date, this is to ensure that sequence with time dependent data is maintained and perform Time Series cross validation with 5 folds to get the best hyperparameters for our model’s performance. By 5 folds, we ensure that it iteratively trains and tests itself by separating chunks of the training data as validation data with each trying a different combination of parameters to see which one leads to the best result overall in training. We use roc_auc as our main metric for comparison as this indicates how well our model can distinguish between our two target classes. The best hyperparameter combination for our model that we get is the following:
 
 - **Regularization Strength (C=10):** This is the inverse regularization indicator, showing that our model benefits from moderate regularization of historical data and higher values can lead to overfitting to our training data. 
