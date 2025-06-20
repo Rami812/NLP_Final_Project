@@ -131,7 +131,7 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
             f'GDP Increase Over Time{title_suffix}',
             f'GDP Increase Distribution{title_suffix}',
             f'GDP vs GDP Increase{title_suffix}',
-            f'Monthly GDP Increase Pattern{title_suffix}'
+            f'Monthly GDP Pattern{title_suffix}'
         ),
         specs=[[{"secondary_y": False}, {"secondary_y": False}],
                [{"secondary_y": False}, {"secondary_y": False}]]
@@ -195,11 +195,11 @@ def plot_gdp_increase_over_time(df_merged, country="All"):
     
     # Plot 4: Monthly pattern (extract month from date)
     df_filtered['Month'] = df_filtered['Date_readable'].dt.month
-    monthly_avg = df_filtered.groupby('Month')['GDP_Increase'].mean().reset_index()
+    monthly_avg = df_filtered.groupby('Month')['GDP Growth Rate (%)'].mean().reset_index()
     
     fig.add_trace(
         go.Bar(x=monthly_avg['Month'], 
-               y=monthly_avg['GDP_Increase'],
+               y=monthly_avg['GDP Growth Rate (%)'],
                name='Monthly Average',
                showlegend=False,
                marker_color='green'),
