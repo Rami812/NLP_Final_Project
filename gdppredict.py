@@ -355,7 +355,7 @@ df_merged=pd.read_excel("df_merged.xlsx")
 
 df_merged['Date_y'] = pd.to_numeric(pd.to_datetime(df_merged['Date_y']))
 
-X = df_merged.select_dtypes(include=['float',"int"]).drop(columns=["GDP_Increase"])
+X = df_merged.select_dtypes(include=['float',"int"]).drop(columns=["GDP_Increase","Date_y"])
 y = df_merged["GDP_Increase"]
 
 test_size = 0.2
